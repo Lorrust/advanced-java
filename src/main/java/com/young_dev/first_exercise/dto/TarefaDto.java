@@ -1,17 +1,15 @@
-package com.young_dev.first_exercise.controller;
+package com.young_dev.first_exercise.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tarefa {
-	
-	int id;
+public class TarefaDto {
+
+	Integer id;
 	String titulo;
 	String descricao;
 	boolean status;
