@@ -3,19 +3,17 @@ package com.young_dev.first_exercise.controller;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-public class Atividade {
+public class Tarefa {
 	
-	private int id;
-	private String title;
-	private String description;
-	private boolean complete;
-	
-	
-	
-	
+	int id;
+	String titulo;
+	String descricao;
+	boolean status;
 
 }
