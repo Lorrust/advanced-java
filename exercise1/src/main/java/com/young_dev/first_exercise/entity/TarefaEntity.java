@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity(name = "tarefa-matutino")
 public class TarefaEntity {
-	
-//	TODO Create updateTarefa
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,6 +30,13 @@ public class TarefaEntity {
 		this.descricao = dto.getDescricao();
 		this.status = dto.getStatus();
 		
+	}
+	
+	public TarefaEntity updateTarefa(TarefaDto dto) {
+		this.titulo = dto.getTitulo();
+		this.descricao = dto.getDescricao();
+		this.status = dto.getStatus();
+		return this;
 	}
 	
 

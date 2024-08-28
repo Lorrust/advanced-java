@@ -14,6 +14,6 @@ public interface TarefaService {
 //	
 	TarefaDto putTarefa(Long id, TarefaDto tarefaAtualizada);
 //	
-//	void deleteTarefa(Long id);
+	void deleteTarefa(Long id);
 	
 	}

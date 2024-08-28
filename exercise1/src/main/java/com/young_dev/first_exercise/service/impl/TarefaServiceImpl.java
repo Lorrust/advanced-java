@@ -2,9 +2,6 @@ package com.young_dev.first_exercise.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import javax.print.attribute.standard.Media;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +11,6 @@ import com.young_dev.first_exercise.dto.TarefaDto;
 import com.young_dev.first_exercise.entity.TarefaEntity;
 import com.young_dev.first_exercise.repository.TarefaRepository;
 import com.young_dev.first_exercise.service.TarefaService;
-
-import lombok.experimental.var;
 
 @Service
 public class TarefaServiceImpl implements TarefaService {
@@ -34,8 +29,10 @@ public class TarefaServiceImpl implements TarefaService {
 		return tarefas;
 	}
 
+
 	@Override
 	public TarefaDto getTarefaById(Long id) {
+		@SuppressWarnings("deprecation")
 		TarefaEntity tarefaEntity = repository.getById(id);
 		return new TarefaDto(tarefaEntity);
 	}
@@ -51,27 +48,17 @@ public class TarefaServiceImpl implements TarefaService {
 
 		TarefaEntity tarefaEntidade = repository.findById(id).orElse(null);
 
-//		TODO Update entity, instead of dto
 		if (tarefaEntidade != null) {
-			TarefaDto tarefaDto = new TarefaDto(tarefaEntidade);
-			tarefaDto.setTitulo(tarefaAtualizada.getTitulo());
-			tarefaDto.setDescricao(tarefaAtualizada.getDescricao());
-			tarefaDto.setStatus(tarefaAtualizada.getStatus());
-
-			TarefaEntity entityAtualizada = new TarefaEntity(tarefaAtualizada);
-			
-			TarefaEntity entidadePersistida = repository.save(tarefaEntidade);
+			tarefaEntidade.updateTarefa(tarefaAtualizada);
+			repository.save(tarefaEntidade);
 			return tarefaAtualizada;
 		}
 		
 		return null;
-		
-		
-		
 	}
-//
-//	public void deleteTarefa(@PathVariable Long id) {
-//		tarefas.removeIf(tarefa -> tarefa.getId().equals(id));
-//	}
+
+	public void deleteTarefa(@PathVariable Long id) {
+		repository.deleteById(id);
+	}
 
 }
