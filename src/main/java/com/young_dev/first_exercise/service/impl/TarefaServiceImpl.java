@@ -4,49 +4,74 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.context.annotation.Primary;
+import javax.print.attribute.standard.Media;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.young_dev.first_exercise.dto.TarefaDto;
+import com.young_dev.first_exercise.entity.TarefaEntity;
+import com.young_dev.first_exercise.repository.TarefaRepository;
 import com.young_dev.first_exercise.service.TarefaService;
+
+import lombok.experimental.var;
 
 @Service
 public class TarefaServiceImpl implements TarefaService {
 
-	List<TarefaDto> tarefas = new ArrayList<>();
-	int counter = 0;
+	@Autowired
+	private TarefaRepository repository;
 
 	@Override
 	public List<TarefaDto> getAllTarefas() {
+		List<TarefaDto> tarefas = new ArrayList<TarefaDto>();
+		List<TarefaEntity> tarefasEntities = repository.findAll();
+
+		for (int i = 0; i < tarefasEntities.size(); i++) {
+			tarefas.add(new TarefaDto(tarefasEntities.get(i)));
+		}
 		return tarefas;
 	}
 
 	@Override
-	public TarefaDto getTarefaById(int id) {
-		return tarefas.stream().filter(tarefa -> tarefa.getId().equals(id)).findFirst().orElse(null);
+	public TarefaDto getTarefaById(Long id) {
+		TarefaEntity tarefaEntity = repository.getById(id);
+		return new TarefaDto(tarefaEntity);
 	}
 
-	public void postTarefa(TarefaDto newTarefa) {
-		counter++;
-		newTarefa.setId(counter);
-		tarefas.add(newTarefa);
+	@Override
+	public TarefaDto postTarefa(TarefaDto newTarefa) {
+		TarefaEntity tarefaEntity = new TarefaEntity(newTarefa);
+		TarefaEntity entidadePersistida = repository.save(tarefaEntity);
+		return new TarefaDto(entidadePersistida);
 	}
 
-	public TarefaDto putTarefa(Integer id, TarefaDto tarefaAtualizada) {
+	public TarefaDto putTarefa(Long id, TarefaDto tarefaAtualizada) {
 
-		Optional<TarefaDto> busca = tarefas.stream().filter(tarefa -> id == tarefa.getId()).findFirst();
-		if (busca.isPresent()) {
-			busca.get().setTitulo(tarefaAtualizada.getTitulo());
-			busca.get().setDescricao(tarefaAtualizada.getDescricao());
-			busca.get().setStatus(tarefaAtualizada.isStatus());
+		TarefaEntity tarefaEntidade = repository.findById(id).orElse(null);
+
+//		TODO Update entity, instead of dto
+		if (tarefaEntidade != null) {
+			TarefaDto tarefaDto = new TarefaDto(tarefaEntidade);
+			tarefaDto.setTitulo(tarefaAtualizada.getTitulo());
+			tarefaDto.setDescricao(tarefaAtualizada.getDescricao());
+			tarefaDto.setStatus(tarefaAtualizada.getStatus());
+
+			TarefaEntity entityAtualizada = new TarefaEntity(tarefaAtualizada);
+			
+			TarefaEntity entidadePersistida = repository.save(tarefaEntidade);
+			return tarefaAtualizada;
 		}
+		
 		return null;
+		
+		
+		
 	}
+//
+//	public void deleteTarefa(@PathVariable Long id) {
+//		tarefas.removeIf(tarefa -> tarefa.getId().equals(id));
+//	}
 
-	public void deleteTarefa(@PathVariable int id) {
-		tarefas.removeIf(tarefa -> tarefa.getId().equals(id));
-	}
-	
 }

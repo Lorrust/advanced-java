@@ -8,12 +8,12 @@ public interface TarefaService {
 	
 	List<TarefaDto> getAllTarefas();
 	
-	TarefaDto getTarefaById(int id);
-	
-	void postTarefa(TarefaDto newTarefa);
-	
-	TarefaDto putTarefa(Integer id, TarefaDto tarefaAtualizada);
-	
-	void deleteTarefa(int id);
+	TarefaDto getTarefaById(Long id);
+//	
+	TarefaDto postTarefa(TarefaDto newTarefa);
+//	
+	TarefaDto putTarefa(Long id, TarefaDto tarefaAtualizada);
+//	
+//	void deleteTarefa(Long id);
 	
 	}
